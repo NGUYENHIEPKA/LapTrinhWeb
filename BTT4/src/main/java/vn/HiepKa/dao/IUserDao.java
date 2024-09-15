@@ -1,5 +1,6 @@
 package vn.HiepKa.dao;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import vn.HiepKa.models.UserModel;
@@ -10,5 +11,7 @@ public interface IUserDao {
 	
 	UserModel findById(int id);
 	
-	void insert(UserModel user);
+	void insert(UserModel user) throws SQLException, Exception;
+	
+	UserModel findByUserName(String username);
 }
