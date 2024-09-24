@@ -3,7 +3,6 @@ package vn.HiepKa.dao.impl;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -71,22 +70,18 @@ public class UserDaoImpl extends DBConnectSQL implements IUserDao {
 	}
 
 	@Override
-	public void insert(UserModel user) throws Exception {
-		String sql = "INSERT INTO Table_1(id, username, password, images, fullname, email, phone, roleid, createDate) VALUES (?,?,?,?,?,?,?,?,?)";
-		
-		try(Connection conn = super.getConnection();
-				PreparedStatement ps = conn.prepareStatement(sql) ) {
-			ps.setInt(1, user.getId());
-			ps.setString(2, (user.getUsername() != null && !user.getUsername().isEmpty()) ? user.getUsername() : null);
-			ps.setString(3, (user.getPassword() != null && !user.getPassword().isEmpty()) ? user.getPassword() : null);
-			ps.setString(4, (user.getImages() != null && !user.getImages().isEmpty()) ? user.getImages() : null);
-			ps.setString(5, (user.getFullname() != null && !user.getFullname().isEmpty()) ? user.getFullname() : null);
-			ps.setString(6, (user.getEmail() != null && !user.getEmail().isEmpty()) ? user.getEmail() : null);
-			ps.setString(7, (user.getPhone() != null && !user.getPhone().isEmpty()) ? user.getPhone() : null);
-			ps.setInt(8, user.getRoleid());
-			ps.setDate(9, user.getCreateDate());
+	public void insert(UserModel user) {
+		String sql = "INSERT INTO Table_1 (email, username, fullname, password, images, roleid, phone, createDate)"
+				+ "VALUES ('', ?, ?, ?, '', 1, '', '')";
+
+		try {
+			conn = new DBConnectSQL().getConnection();
+			ps = conn.prepareStatement(sql);
+			ps.setString(1, user.getUsername());
+			ps.setString(2, user.getFullname());
+			ps.setString(3, user.getPassword());
 			ps.executeUpdate();
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
@@ -142,37 +137,36 @@ public class UserDaoImpl extends DBConnectSQL implements IUserDao {
 //	        System.out.println("Không tìm thấy người dùng với ID " + idToFind + ".");
 //	    }
 //	}
-//	public static void main(String[] args) {
-//        UserDaoImpl userDao = new UserDaoImpl();
-//        String usernameToFind = "hiepka";
-//        UserModel user = userDao.findByUserName(usernameToFind);
-//        if (user != null) {
-//            System.out.println("Thông tin người dùng với username '" + usernameToFind + "':");
-//            System.out.println("ID: " + user.getId());
-//            System.out.println("Email: " + user.getEmail());
-//            System.out.println("Username: " + user.getUsername());
-//            System.out.println("Fullname: " + user.getFullname());
-//            System.out.println("Password: " + user.getPassword());
-//            System.out.println("Images: " + user.getImages());
-//            System.out.println("Role ID: " + user.getRoleid());
-//            System.out.println("Phone: " + user.getPhone());
-//            System.out.println("Create Date: " + user.getCreateDate());
-//        } else {
-//            System.out.println("Không tìm thấy người dùng với username '" + usernameToFind + "'.");
-//        }
-//    }
-
 	public static void main(String[] args) {
-		UserDaoImpl userDao = new UserDaoImpl();
-		UserModel newUser = new UserModel(5, "vanan", "777", "", "Van An", "vanan@gmail.com", "0765213678", 2,
-				java.sql.Date.valueOf("2004-01-01"));
-			try {
-				userDao.insert(newUser);
-				System.out.println("Đã chèn người dùng mới vào cơ sở dữ liệu.");
-			} catch (Exception e) {
-				e.printStackTrace();
-				System.out.println("Lỗi");
-			}
-			
-	}
+        UserDaoImpl userDao = new UserDaoImpl();
+        String usernameToFind = "hiepka";
+        UserModel user = userDao.findByUserName(usernameToFind);
+        if (user != null) {
+            System.out.println("Thông tin người dùng với username '" + usernameToFind + "':");
+            System.out.println("ID: " + user.getId());
+            System.out.println("Email: " + user.getEmail());
+            System.out.println("Username: " + user.getUsername());
+            System.out.println("Fullname: " + user.getFullname());
+            System.out.println("Password: " + user.getPassword());
+            System.out.println("Images: " + user.getImages());
+            System.out.println("Role ID: " + user.getRoleid());
+            System.out.println("Phone: " + user.getPhone());
+            System.out.println("Create Date: " + user.getCreateDate());
+        } else {
+            System.out.println("Không tìm thấy người dùng với username '" + usernameToFind + "'.");
+        }
+    }
+
+//	public static void main(String[] args) {
+//		UserDaoImpl userDao = new UserDaoImpl();
+//		UserModel newUser = new UserModel(5, "vanan", "777", "", "Van An", "vanan@gmail.com", "0765213678", 2,
+//				java.sql.Date.valueOf("2004-01-01"));
+//			try {
+//				userDao.insert(newUser);
+//				System.out.println("Đã chèn người dùng mới vào cơ sở dữ liệu.");
+//			} catch (Exception e) {
+//				e.printStackTrace();
+//				System.out.println("Lỗi");
+//			}		
+//	}
 }

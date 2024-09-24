@@ -12,7 +12,7 @@ public class UserService implements IUserService{
 	@Override
 	public UserModel login(String username, String password) {
 		UserModel user = this.FindByUserName(username);
-		if (user != null && password.equals(user.getPassword())) {
+		if (user != null && password.trim().equals(user.getPassword().trim())) {
 		return user;
 		}
 		return null;
@@ -26,5 +26,24 @@ public class UserService implements IUserService{
 	public static void main(String[] args) {
 		IUserService userService = new UserService();
 		System.out.println(userService.FindByUserName("hiepka"));
+	}
+
+	@Override
+	public boolean register(String username, String password, String fullname) {
+		UserModel existingUser = userDao.findByUserName(username);
+		if (existingUser != null) {
+			return false; 
+		}
+		UserModel newUser = new UserModel();
+		newUser.setUsername(username);
+		newUser.setPassword(password); 
+		newUser.setFullname(fullname);
+		try {
+	        userDao.insert(newUser);
+	        return true;  
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return false;  
+	    }
 	}
 }
