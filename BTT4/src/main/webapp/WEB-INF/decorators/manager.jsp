@@ -7,6 +7,6 @@
 <title>Insert title here</title>
 </head>
 <body>
-		<a href="${pageContext.request.contextPath }/admin/categories"> Category</a>
+AAA
 </body>
 </html>
