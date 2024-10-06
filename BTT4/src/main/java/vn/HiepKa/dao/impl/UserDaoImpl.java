@@ -114,6 +114,7 @@ public class UserDaoImpl extends DBConnectSQL implements IUserDao {
 			e.printStackTrace();
 		}
 		return null;
+		
 	}
 
 //	public static void main(String[] args) {
@@ -156,6 +157,49 @@ public class UserDaoImpl extends DBConnectSQL implements IUserDao {
             System.out.println("Không tìm thấy người dùng với username '" + usernameToFind + "'.");
         }
     }
+
+	@Override
+	public UserModel findByEmail(String email) {
+		String sql = "SELECT * FROM Table_1 WHERE email = ?";
+
+        try {
+            conn = new DBConnectSQL().getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, email);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                return new UserModel(
+                    rs.getInt("id"),
+                    rs.getString("username"),
+                    rs.getString("password"),
+                    rs.getString("images"),
+                    rs.getString("fullname"),
+                    rs.getString("email"),
+                    rs.getString("phone"),
+                    rs.getInt("roleid"),
+                    rs.getDate("createDate")
+                );
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+		return null;
+	}
+
+	@Override
+	public void resetPassword(String email, String newPassword) {
+		String sql = "UPDATE Table_1 SET password = ? WHERE email = ?";
+        try {
+            conn = new DBConnectSQL().getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, newPassword);
+            ps.setString(2, email);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+		
+	}
 
 //	public static void main(String[] args) {
 //		UserDaoImpl userDao = new UserDaoImpl();

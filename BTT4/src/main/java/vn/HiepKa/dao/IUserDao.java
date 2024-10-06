@@ -14,4 +14,8 @@ public interface IUserDao {
 	void insert(UserModel user) throws SQLException, Exception;
 	
 	UserModel findByUserName(String username);
+	
+	UserModel findByEmail(String email);
+	
+	public void resetPassword(String email, String newPassword);
 }

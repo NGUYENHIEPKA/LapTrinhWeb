@@ -46,4 +46,15 @@ public class UserService implements IUserService{
 	        return false;  
 	    }
 	}
+	public UserModel findByEmail(String email) {
+        return userDao.findByEmail(email);
+    }
+	public boolean resetPassword(String email, String newPassword, String confirmPassword) {
+        // Kiểm tra nếu mật khẩu mới và xác nhận trùng khớp
+        if (newPassword.equals(confirmPassword)) {
+            userDao.resetPassword(email, newPassword); // Cập nhật mật khẩu trong DB
+            return true;
+        }
+        return false;
+    }
 }
